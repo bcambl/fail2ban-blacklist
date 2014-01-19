@@ -3,4 +3,4 @@ Added an action to run a script that logs banned IP's to a flat file (ip.blackli
 
 Import IP's from ip.blacklist to Fail2ban by executing reban.py
 
-######hint: Configure reban.py to when the fail2ban sevice starts
+######hint: Configure reban.py to run when the fail2ban sevice starts
