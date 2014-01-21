@@ -17,7 +17,7 @@ if valip:
     f.close()
     if found == 0:
         f = open("/etc/fail2ban/ip.blacklist", "a")
-        f.write(ip)
+        f.write(ip+"\n")
         f.close()
 else:
     pass
