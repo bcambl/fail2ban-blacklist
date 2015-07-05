@@ -13,8 +13,8 @@ actionstart = iptables -N fail2ban-<name>
               iptables -A f2b-BLACKLIST -j RETURN
               iptables -I <chain> -p <protocol> --dport <port> -j f2b-BLACKLIST
 
-              # Re-Ban blacklisted ips from ip.blacklist:
-              #/usr/bin/python /etc/fail2ban/reban.py
+              # Re-Ban blacklisted ips from ip.blacklist: (remove comment to enable)
+              # /usr/bin/python /etc/fail2ban/reban.py
 
 
 actionstop = iptables -D <chain> -p <protocol> --dport <port> -j fail2ban-<name>
