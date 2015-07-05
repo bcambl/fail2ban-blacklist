@@ -1,0 +1,44 @@
+[INCLUDES]
+
+before = iptables-blocktype.conf
+
+[Definition]
+
+actionstart = iptables -N fail2ban-<name>
+              iptables -A fail2ban-<name> -j RETURN
+              iptables -I <chain> -p <protocol> --dport <port> -j fail2ban-<name>
+
+              # Create blacklist chain
+              iptables -N f2b-BLACKLIST
+              iptables -A f2b-BLACKLIST -j RETURN
+              iptables -I <chain> -p <protocol> --dport <port> -j f2b-BLACKLIST
+
+              # Re-Ban blacklisted ips from ip.blacklist:
+              #/usr/bin/python /etc/fail2ban/reban.py
+
+
+actionstop = iptables -D <chain> -p <protocol> --dport <port> -j fail2ban-<name>
+             iptables -F fail2ban-<name>
+             iptables -X fail2ban-<name>
+
+             # Drop and delete the blacklist chain
+             iptables -D <chain> -p <protocol> --dport <port> -j f2b-BLACKLIST
+             iptables -F f2b-BLACKLIST
+             iptables -X f2b-BLACKLIST
+
+actioncheck = iptables -n -L <chain> | grep -q 'fail2ban-<name>[ \t]'
+
+actionban = iptables -I fail2ban-<name> 1 -s <ip> -j <blocktype>
+            /usr/bin/python /etc/fail2ban/blacklist.py <ip>
+
+actionunban = iptables -D fail2ban-<name> -s <ip> -j <blocktype>
+
+[Init]
+
+name = default
+
+port = ssh
+
+protocol = tcp
+
+chain = INPUT
