@@ -48,6 +48,12 @@ You may also execute the reban.py script manually:
 /etc/fail2ban/reban.py
 ```
 
+#### optional:
+Edit ```report.py``` with your email address and configure a cronjob to run daily.
+
+copy ```report.py``` to ```/etc/cron.daily```
+
+This will email you all the banned IP's from the previous day with the associated country code.
 
 ### Dependencies
 
