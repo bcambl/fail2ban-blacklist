@@ -3,21 +3,21 @@
 from datetime import datetime, timedelta
 from email.mime.text import MIMEText
 import subprocess
-import smtplib
 import csv
 import re
 
 report_to = 'you@example.com'
 report_from = 'fail2ban@example.com'
 
-msg_header = """
-SSH Ban Report
-==============
-"""
-ip_list = ''
-
 yesterday = datetime.now() - timedelta(days=1)
 yesterday = yesterday.strftime('%Y-%m-%d')
+
+msg_header = """
+SSH Ban Report %s
+==========================
+""" % yesterday
+
+ip_list = ''
 
 with open("/etc/fail2ban/blacklist.csv", "rb") as blacklist_file:
     blacklist = csv.DictReader(blacklist_file)
@@ -44,8 +44,8 @@ try:
     msg['From'] = report_from
     msg['To'] = report_to
 
-    s = smtplib.SMTP('localhost')
-    s.sendmail(report_from, [report_to], msg.as_string())
-    s.quit()
+    send = subprocess.Popen(["/usr/sbin/sendmail", "-t", "-oi"],
+                            stdin=subprocess.PIPE)
+    send.communicate(msg.as_string())
 except Exception as e:
     print(e)
