@@ -6,7 +6,7 @@ import csv
 import re
 
 ban_date = datetime.now().strftime('%Y-%m-%d')
-ban_time = datetime.now().strftime('%H:%M-%S')
+ban_time = datetime.now().strftime('%H:%M:%S')
 
 
 def ip_validation(ip=None):
